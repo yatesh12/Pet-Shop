@@ -1,0 +1,67 @@
+services:
+  - type: web
+    name: petshop-catalog-service
+    runtime: docker
+    dockerContext: .
+    dockerfilePath: ./backend/petshop-catalog-service/Dockerfile
+    autoDeployTrigger: commit
+    envVars:
+      - key: SERVER_PORT
+        value: "8081"
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+
+  - type: web
+    name: petshop-commerce-service
+    runtime: docker
+    dockerContext: .
+    dockerfilePath: ./backend/petshop-commerce-service/Dockerfile
+    autoDeployTrigger: commit
+    envVars:
+      - key: SERVER_PORT
+        value: "8082"
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+
+  - type: web
+    name: petshop-web
+    runtime: docker
+    dockerContext: .
+    dockerfilePath: ./frontend/petshop-web/Dockerfile
+    autoDeployTrigger: commit
+    envVars:
+      - key: SERVER_PORT
+        value: "8080"
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+      - key: PETSHOP_SERVICES_CATALOG_BASE_URL
+        sync: false
+      - key: PETSHOP_SERVICES_COMMERCE_BASE_URL
+        sync: false
+
+  - type: web
+    name: petshop-gateway
+    runtime: docker
+    dockerContext: .
+    dockerfilePath: ./backend/petshop-gateway/Dockerfile
+    autoDeployTrigger: commit
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: PETSHOP_ROUTES_WEB
+        sync: false
+      - key: PETSHOP_ROUTES_CATALOG
+        sync: false
+      - key: PETSHOP_ROUTES_COMMERCE
+        sync: false
