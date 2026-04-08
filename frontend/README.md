@@ -10,7 +10,7 @@
 
 - The web app is served privately behind the gateway in the recommended production setup.
 - It talks to the catalog and commerce services over REST.
-- Keep media assets in Supabase Storage and store their public URLs in the current `imageUrl` fields.
+- Keep media assets as normal HTTP URLs and store them in the current `imageUrl` fields.
 
 ## Environment Example
 

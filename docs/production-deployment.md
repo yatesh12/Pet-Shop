@@ -19,12 +19,12 @@ Pet Shop/
 |-- render.yaml
 ```
 
-## 2. Supabase Setup
+## 2. Neon Setup
 
 ### Database
 
-1. Create a Supabase project.
-2. Open `Connect` in Supabase.
+1. Create a Neon project.
+2. Open the connection details in Neon.
 3. Use the PostgreSQL connection details for the app.
 4. Put the JDBC URL in `SPRING_DATASOURCE_URL`.
 5. Put the username in `SPRING_DATASOURCE_USERNAME`.
@@ -34,25 +34,25 @@ Pet Shop/
 Recommended JDBC pattern:
 
 ```text
-jdbc:postgresql://aws-0-REGION.pooler.supabase.com:5432/postgres?sslmode=require
+jdbc:postgresql://YOUR-NEON-HOST/neondb?sslmode=require
 ```
 
 Recommended username pattern:
 
 ```text
-postgres.PROJECT_REF
+YOUR_NEON_USER
 ```
 
-### Object Storage
+### Images
 
-1. Create a public bucket in Supabase Storage.
-2. Upload product, pet, service, team, and blog images.
-3. Save the public URL in the existing `imageUrl` or `featuredImageUrl` columns.
+1. Store image URLs directly in the existing `imageUrl` or `featuredImageUrl` columns.
+2. You can use any public HTTP image URL.
+3. No object storage service is required for this setup.
 
 Example public URL:
 
 ```text
-https://PROJECT_REF.supabase.co/storage/v1/object/public/petshop-assets/products/carrier.svg
+https://example.com/images/products/carrier.svg
 ```
 
 ## 3. Render Setup
@@ -70,11 +70,12 @@ The public traffic should go through the gateway.
 
 1. Push the repo to GitHub.
 2. In Render, create a Blueprint from the repo.
-3. Use the root [`render.yaml`](../render.yaml).
-4. Set the Supabase database env vars for the three stateful services.
-5. Let Render build all services.
-6. Expose only the gateway publicly.
-7. Use the service URLs or blueprint wiring for internal traffic.
+3. If you want free-tier Render, use [`render-free.yaml`](../render-free.yaml).
+4. If you want paid/private services, use [`render-backend.yaml`](../render-backend.yaml).
+5. Set the Neon database env vars for the three stateful services.
+6. Let Render build all services.
+7. Expose only the gateway publicly.
+8. Use the service URLs or blueprint wiring for internal traffic.
 
 ## 5. Manual Values You Must Configure
 
@@ -92,12 +93,12 @@ Optional:
 - `JAVA_OPTS=-Xms256m -Xmx512m`
 - `THYMELEAF_CACHE=true` in production
 
-## 6. How Supabase Storage Fits Without Logic Changes
+## 6. How Images Fit Without Logic Changes
 
 The app already stores raw image URLs. That means:
 
-1. You upload an image to Supabase Storage.
-2. You copy its public URL.
+1. You host the image anywhere public.
+2. You copy its HTTP URL.
 3. You paste the URL into the admin form or seed data.
 4. The existing UI renders the image with no code change.
 
@@ -135,4 +136,4 @@ After Render deploys:
 6. Submit a booking and inquiry.
 7. Log in as admin.
 8. Confirm admin pages load.
-9. Verify one image from Supabase Storage renders in production.
+9. Verify one public image URL renders in production.

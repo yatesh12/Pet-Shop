@@ -5,7 +5,7 @@ Pet Shop is split into two top-level folders now:
 - `frontend/` for the customer-facing Thymeleaf app
 - `backend/` for the gateway and the microservices
 
-The business logic stays the same. This wrap just makes the repository easier to deploy, easier to reason about, and easier to hand off to Render and Supabase.
+The business logic stays the same. This wrap just makes the repository easier to deploy, easier to reason about, and easier to hand off to Render and Neon.
 
 ## What Runs Where
 
@@ -19,8 +19,8 @@ The business logic stays the same. This wrap just makes the repository easier to
 
 - Gateway is the public URL.
 - Web app talks to catalog and commerce via REST.
-- All stateful services use the same Supabase PostgreSQL database.
-- Asset URLs can be stored directly as public Supabase Storage URLs in the existing `imageUrl` fields.
+- All stateful services use the same Neon PostgreSQL database.
+- Asset URLs can be stored directly as normal HTTP URLs in the existing `imageUrl` fields.
 
 ## Local Environment Variables
 
@@ -52,16 +52,20 @@ Gateway URL locally:
 
 The recommended production setup is:
 
-1. Supabase for PostgreSQL
-2. Supabase Storage for public images
-3. Render for hosting the services
-4. `petshop-gateway` as the only public endpoint
+1. Neon for PostgreSQL
+2. Render for hosting the services
+3. `petshop-gateway` as the public entrypoint
 
 Full step-by-step notes are in:
 
 - [`docs/production-deployment.md`](docs/production-deployment.md)
 - [`backend/README.md`](backend/README.md)
 - [`frontend/README.md`](frontend/README.md)
+
+Render blueprints in the repo:
+
+- [`render-free.yaml`](render-free.yaml) for the free-tier setup
+- [`render-backend.yaml`](render-backend.yaml) for the paid/private-service setup
 
 ## Verification Checklist
 
@@ -70,7 +74,7 @@ Full step-by-step notes are in:
 - Registration and login work
 - Cart, checkout, bookings, inquiries, and adoptions work end to end
 - Admin dashboard, catalog, operations, and users pages work
-- Public asset URLs render correctly from Supabase Storage
+- Public HTTP image URLs render correctly
 
 ## Note
 
