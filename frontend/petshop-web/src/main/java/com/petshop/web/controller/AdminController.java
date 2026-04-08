@@ -1,12 +1,7 @@
 package com.petshop.web.controller;
 
-import com.petshop.catalog.dto.UpsertBlogPostRequest;
-import com.petshop.catalog.dto.UpsertCategoryRequest;
-import com.petshop.catalog.dto.UpsertFaqRequest;
-import com.petshop.catalog.dto.UpsertPetRequest;
-import com.petshop.catalog.dto.UpsertProductRequest;
-import com.petshop.catalog.dto.UpsertServiceRequest;
 import com.petshop.web.dto.*;
+import com.petshop.shared.dto.*;
 import com.petshop.web.service.CatalogClient;
 import com.petshop.web.service.CommerceClient;
 import com.petshop.web.service.UserAccountService;

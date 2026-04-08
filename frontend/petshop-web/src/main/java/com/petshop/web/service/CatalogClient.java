@@ -1,12 +1,5 @@
 package com.petshop.web.service;
 
-import com.petshop.catalog.dto.CatalogAdminSummaryDto;
-import com.petshop.catalog.dto.UpsertBlogPostRequest;
-import com.petshop.catalog.dto.UpsertCategoryRequest;
-import com.petshop.catalog.dto.UpsertFaqRequest;
-import com.petshop.catalog.dto.UpsertPetRequest;
-import com.petshop.catalog.dto.UpsertProductRequest;
-import com.petshop.catalog.dto.UpsertServiceRequest;
 import com.petshop.shared.dto.*;
 import java.math.BigDecimal;
 import java.util.List;
