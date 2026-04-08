@@ -1,0 +1,73 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: petshop-postgres
+    environment:
+      POSTGRES_DB: petshop
+      POSTGRES_USER: petshop
+      POSTGRES_PASSWORD: petshop
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+  catalog-service:
+    build:
+      context: .
+      dockerfile: backend/petshop-catalog-service/Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/petshop
+      SPRING_DATASOURCE_USERNAME: petshop
+      SPRING_DATASOURCE_PASSWORD: petshop
+      SERVER_PORT: 8081
+    depends_on:
+      - postgres
+
+  commerce-service:
+    build:
+      context: .
+      dockerfile: backend/petshop-commerce-service/Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/petshop
+      SPRING_DATASOURCE_USERNAME: petshop
+      SPRING_DATASOURCE_PASSWORD: petshop
+      SERVER_PORT: 8082
+    depends_on:
+      - postgres
+
+  web:
+    build:
+      context: .
+      dockerfile: frontend/petshop-web/Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/petshop
+      SPRING_DATASOURCE_USERNAME: petshop
+      SPRING_DATASOURCE_PASSWORD: petshop
+      PETSHOP_SERVICES_CATALOG_BASE_URL: http://catalog-service:8081
+      PETSHOP_SERVICES_COMMERCE_BASE_URL: http://commerce-service:8082
+      SERVER_PORT: 8080
+    depends_on:
+      - postgres
+      - catalog-service
+      - commerce-service
+
+  gateway:
+    build:
+      context: .
+      dockerfile: backend/petshop-gateway/Dockerfile
+    environment:
+      PETSHOP_ROUTES_WEB: http://web:8080
+      PETSHOP_ROUTES_CATALOG: http://catalog-service:8081
+      PETSHOP_ROUTES_COMMERCE: http://commerce-service:8082
+      SERVER_PORT: 8090
+    ports:
+      - "8090:8090"
+    depends_on:
+      - web
+      - catalog-service
+      - commerce-service
+
+volumes:
+  pg-data:

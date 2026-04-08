@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Services')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div th:replace="~{fragments/layout :: alerts}"></div>
+<main class="container py-5">
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <span class="badge-soft">Services</span>
+            <h1 class="mt-2">Grooming, training, wellness, and boarding</h1>
+            <div class="row g-4 mt-1">
+                <div class="col-md-6" th:each="service : ${services}">
+                    <div class="section-card p-3 h-100">
+                        <img class="card-media card-media-sm rounded-4 mb-3" th:src="${service.imageUrl}" th:alt="${service.name}">
+                        <span class="badge bg-light text-dark" th:text="${service.category}"></span>
+                        <h5 class="mt-3" th:text="${service.name}"></h5>
+                        <p class="small text-muted" th:text="${service.description}"></p>
+                        <div class="fw-semibold" th:text="${'$' + service.price + ' · ' + service.durationMinutes + ' min'}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="section-card p-4 sticky-sidebar">
+                <h3>Book a Service</h3>
+                <form th:action="@{/services/book}" method="post" th:object="${bookingForm}">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    <select class="form-select mb-3" th:field="*{serviceSlug}">
+                        <option value="">Choose a service</option>
+                        <option th:each="service : ${services}" th:value="${service.slug}" th:text="${service.name}"></option>
+                    </select>
+                    <input class="form-control mb-3" th:field="*{serviceName}" placeholder="Service name">
+                    <input class="form-control mb-3" th:field="*{petName}" placeholder="Pet name">
+                    <input class="form-control mb-3" th:field="*{petType}" placeholder="Pet type">
+                    <input class="form-control mb-3" type="date" th:field="*{appointmentDate}">
+                    <input class="form-control mb-3" th:field="*{customerName}" placeholder="Your name">
+                    <input class="form-control mb-3" th:field="*{customerEmail}" placeholder="Email">
+                    <input class="form-control mb-3" th:field="*{customerPhone}" placeholder="Phone">
+                    <textarea class="form-control mb-3" rows="4" th:field="*{notes}" placeholder="Special requests or pet notes"></textarea>
+                    <button class="btn btn-brand w-100" type="submit">Request Booking</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

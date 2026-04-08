@@ -1,0 +1,34 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Run Pet Shop Web",
+      "request": "launch",
+      "mainClass": "com.petshop.web.PetShopWebApplication",
+      "projectName": "petshop-web"
+    },
+    {
+      "type": "java",
+      "name": "Run Catalog Service",
+      "request": "launch",
+      "mainClass": "com.petshop.catalog.CatalogServiceApplication",
+      "projectName": "petshop-catalog-service"
+    },
+    {
+      "type": "java",
+      "name": "Run Commerce Service",
+      "request": "launch",
+      "mainClass": "com.petshop.commerce.CommerceServiceApplication",
+      "projectName": "petshop-commerce-service"
+    },
+    {
+      "type": "java",
+      "name": "Run Gateway",
+      "request": "launch",
+      "mainClass": "com.petshop.gateway.PetShopGatewayApplication",
+      "projectName": "petshop-gateway"
+    }
+  ]
+}
+

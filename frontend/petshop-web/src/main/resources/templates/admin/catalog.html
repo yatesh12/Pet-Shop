@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Admin Catalog')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div th:replace="~{fragments/layout :: alerts}"></div>
+<main class="container py-5">
+    <div class="row g-4">
+        <div class="col-lg-3" th:replace="~{fragments/layout :: adminSidebar}"></div>
+        <div class="col-lg-9">
+            <div class="section-card p-4 mb-4">
+                <h2>Catalog Management</h2>
+                <div class="row g-4 mt-1">
+                    <div class="col-lg-6">
+                        <h5>Products</h5>
+                        <form th:action="@{/admin/catalog/product}" method="post" th:object="${productForm}" class="mb-3">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <input class="form-control mb-2" th:field="*{id}" placeholder="ID for edit (optional)">
+                            <input class="form-control mb-2" th:field="*{name}" placeholder="Name">
+                            <input class="form-control mb-2" th:field="*{slug}" placeholder="Slug">
+                            <input class="form-control mb-2" th:field="*{description}" placeholder="Description">
+                            <input class="form-control mb-2" th:field="*{supplierName}" placeholder="Supplier">
+                            <input class="form-control mb-2" th:field="*{price}" placeholder="Price">
+                            <input class="form-control mb-2" th:field="*{stockQuantity}" placeholder="Stock">
+                            <input class="form-control mb-2" th:field="*{imageUrl}" placeholder="Image URL">
+                            <select class="form-select mb-2" th:field="*{categorySlug}">
+                                <option th:each="category : ${productCategories}" th:value="${category.slug}" th:text="${category.name}"></option>
+                            </select>
+                            <button class="btn btn-brand w-100" type="submit">Save Product</button>
+                        </form>
+                        <div class="table-shell"><table class="table table-sm"><tr th:each="product : ${products.content}"><td th:text="${product.name}"></td><td th:text="${'$' + product.price}"></td><td><form th:action="@{'/admin/catalog/product/delete/' + ${product.id}}" method="post"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"><button class="btn btn-sm btn-outline-danger">Delete</button></form></td></tr></table></div>
+                    </div>
+                    <div class="col-lg-6">
+                        <h5>Pets</h5>
+                        <form th:action="@{/admin/catalog/pet}" method="post" th:object="${petForm}" class="mb-3">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <input class="form-control mb-2" th:field="*{id}" placeholder="ID for edit (optional)">
+                            <input class="form-control mb-2" th:field="*{name}" placeholder="Name">
+                            <input class="form-control mb-2" th:field="*{slug}" placeholder="Slug">
+                            <input class="form-control mb-2" th:field="*{breed}" placeholder="Breed">
+                            <input class="form-control mb-2" th:field="*{ageInMonths}" placeholder="Age in months">
+                            <input class="form-control mb-2" th:field="*{gender}" placeholder="Gender">
+                            <input class="form-control mb-2" th:field="*{price}" placeholder="Price">
+                            <input class="form-control mb-2" th:field="*{saleType}" placeholder="Sale type">
+                            <input class="form-control mb-2" th:field="*{description}" placeholder="Description">
+                            <input class="form-control mb-2" th:field="*{imageUrl}" placeholder="Image URL">
+                            <input class="form-control mb-2" th:field="*{vaccinations}" placeholder="Vaccinations comma-separated">
+                            <select class="form-select mb-2" th:field="*{categorySlug}">
+                                <option th:each="category : ${petCategories}" th:value="${category.slug}" th:text="${category.name}"></option>
+                            </select>
+                            <button class="btn btn-brand w-100" type="submit">Save Pet</button>
+                        </form>
+                        <div class="table-shell"><table class="table table-sm"><tr th:each="pet : ${pets.content}"><td th:text="${pet.name}"></td><td th:text="${pet.breed}"></td><td><form th:action="@{'/admin/catalog/pet/delete/' + ${pet.id}}" method="post"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"><button class="btn btn-sm btn-outline-danger">Delete</button></form></td></tr></table></div>
+                    </div>
+                </div>
+            </div>
+            <div class="section-card p-4 mb-4">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <h5>Services</h5>
+                        <form th:action="@{/admin/catalog/service}" method="post" th:object="${serviceForm}">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <input class="form-control mb-2" th:field="*{name}" placeholder="Name">
+                            <input class="form-control mb-2" th:field="*{slug}" placeholder="Slug">
+                            <input class="form-control mb-2" th:field="*{category}" placeholder="Category">
+                            <input class="form-control mb-2" th:field="*{shortDescription}" placeholder="Short description">
+                            <input class="form-control mb-2" th:field="*{description}" placeholder="Description">
+                            <input class="form-control mb-2" th:field="*{price}" placeholder="Price">
+                            <input class="form-control mb-2" th:field="*{durationMinutes}" placeholder="Duration minutes">
+                            <input class="form-control mb-2" th:field="*{imageUrl}" placeholder="Image URL">
+                            <button class="btn btn-brand w-100" type="submit">Save Service</button>
+                        </form>
+                    </div>
+                    <div class="col-lg-6">
+                        <h5>Categories</h5>
+                        <form th:action="@{/admin/catalog/category/product}" method="post" th:object="${categoryForm}" class="mb-3">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <input class="form-control mb-2" th:field="*{name}" placeholder="Product category name">
+                            <input class="form-control mb-2" th:field="*{slug}" placeholder="Slug">
+                            <input class="form-control mb-2" th:field="*{description}" placeholder="Description">
+                            <button class="btn btn-outline-brand w-100" type="submit">Add Product Category</button>
+                        </form>
+                        <form th:action="@{/admin/catalog/category/pet}" method="post" th:object="${categoryForm}">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <input class="form-control mb-2" th:field="*{name}" placeholder="Pet category name">
+                            <input class="form-control mb-2" th:field="*{slug}" placeholder="Slug">
+                            <input class="form-control mb-2" th:field="*{description}" placeholder="Description">
+                            <button class="btn btn-outline-brand w-100" type="submit">Add Pet Category</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="section-card p-4">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <h5>Blog Posts</h5>
+                        <form th:action="@{/admin/catalog/blog}" method="post" th:object="${blogForm}">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <input class="form-control mb-2" th:field="*{title}" placeholder="Title">
+                            <input class="form-control mb-2" th:field="*{slug}" placeholder="Slug">
+                            <input class="form-control mb-2" th:field="*{excerpt}" placeholder="Excerpt">
+                            <textarea class="form-control mb-2" rows="4" th:field="*{content}" placeholder="Content"></textarea>
+                            <input class="form-control mb-2" th:field="*{category}" placeholder="Category">
+                            <input class="form-control mb-2" th:field="*{tags}" placeholder="Tags comma-separated">
+                            <input class="form-control mb-2" th:field="*{authorName}" placeholder="Author">
+                            <input class="form-control mb-2" th:field="*{featuredImageUrl}" placeholder="Image URL">
+                            <button class="btn btn-brand w-100" type="submit">Save Blog</button>
+                        </form>
+                    </div>
+                    <div class="col-lg-6">
+                        <h5>FAQ Items</h5>
+                        <form th:action="@{/admin/catalog/faq}" method="post" th:object="${faqForm}">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <input class="form-control mb-2" th:field="*{question}" placeholder="Question">
+                            <textarea class="form-control mb-2" rows="4" th:field="*{answer}" placeholder="Answer"></textarea>
+                            <input class="form-control mb-2" th:field="*{category}" placeholder="Category">
+                            <input class="form-control mb-2" th:field="*{displayOrder}" placeholder="Display order">
+                            <button class="btn btn-brand w-100" type="submit">Save FAQ</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

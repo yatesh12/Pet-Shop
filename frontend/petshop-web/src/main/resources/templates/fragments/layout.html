@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title} + ' | Pet Shop'">Pet Shop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+
+<nav th:fragment="navbar" class="navbar navbar-expand-lg sticky-top border-bottom nav-shell" data-nav-shell>
+    <div class="container py-2">
+        <a class="navbar-brand text-success" th:href="@{/}">
+            <span class="brand-mark">Pet Shop</span>
+            <small class="brand-subtitle">Care commerce and adoption</small>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="mainNav" class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+                <li class="nav-item"><a class="nav-link" th:href="@{/shop}">Shop</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/pets}">Pets</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/services}">Services</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/blog}">Blog</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/about}">About</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/contact}">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/faq}">FAQ</a></li>
+                <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link" th:href="@{/cart}">Cart</a></li>
+                <li class="nav-item" sec:authorize="isAuthenticated()"><a class="btn btn-outline-brand" th:href="@{/account}">Account</a></li>
+                <li class="nav-item" sec:authorize="!isAuthenticated()"><a class="btn btn-brand" th:href="@{/login}">Sign In</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div th:fragment="alerts" class="container mt-4">
+    <div th:if="${successMessage}" class="alert alert-success flash-alert" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger flash-alert" th:text="${errorMessage}"></div>
+</div>
+
+<aside th:fragment="adminSidebar" class="admin-sidebar admin-panel p-3 sticky-sidebar">
+    <div class="fw-semibold mb-3">Admin Workspace</div>
+    <div class="nav flex-column gap-2">
+        <a class="nav-link" th:href="@{/admin}">Dashboard</a>
+        <a class="nav-link" th:href="@{/admin/catalog}">Catalog</a>
+        <a class="nav-link" th:href="@{/admin/operations}">Operations</a>
+        <a class="nav-link" th:href="@{/admin/users}">Users</a>
+    </div>
+</aside>
+
+<footer th:fragment="footer" class="footer-shell mt-5 pt-5 pb-4">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <h5 class="text-white">Pet Shop</h5>
+                <p>Modern pet care, ethical adoptions, and polished service experiences in one storefront.</p>
+                <div class="footer-pill">Storefront, services, accounts, and admin operations in one flow.</div>
+            </div>
+            <div class="col-lg-4">
+                <h6 class="text-white">Visit</h6>
+                <p>214 Maple Avenue, Austin, Texas</p>
+                <p>Mon-Sat: 9:00 AM - 7:00 PM</p>
+            </div>
+            <div class="col-lg-4">
+                <h6 class="text-white">Contact</h6>
+                <p><a th:href="@{/contact}">contact@petshop.local</a></p>
+                <p>+1 555-0100</p>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/app.js}"></script>
+</footer>
+</body>
+</html>

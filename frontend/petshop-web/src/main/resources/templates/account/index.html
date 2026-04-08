@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Account')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div th:replace="~{fragments/layout :: alerts}"></div>
+<main class="container py-5">
+    <div class="section-card p-4 p-lg-5">
+        <h1>My Account</h1>
+        <div class="row g-4 mt-1">
+            <div class="col-lg-5">
+                <div class="info-card p-4 mb-4">
+                    <h4>Profile</h4>
+                    <form th:action="@{/account/profile}" method="post" th:object="${profileForm}">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <input class="form-control mb-3" th:field="*{firstName}" placeholder="First name">
+                        <input class="form-control mb-3" th:field="*{lastName}" placeholder="Last name">
+                        <input class="form-control mb-3" th:field="*{email}" placeholder="Email">
+                        <input class="form-control mb-3" th:field="*{phone}" placeholder="Phone">
+                        <button class="btn btn-brand" type="submit">Save Profile</button>
+                    </form>
+                </div>
+                <div class="info-card p-4">
+                    <h4>Address Book</h4>
+                    <form th:action="@{/account/address}" method="post" th:object="${addressForm}">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <input class="form-control mb-3" th:field="*{label}" placeholder="Label">
+                        <input class="form-control mb-3" th:field="*{lineOne}" placeholder="Line 1">
+                        <input class="form-control mb-3" th:field="*{lineTwo}" placeholder="Line 2">
+                        <input class="form-control mb-3" th:field="*{city}" placeholder="City">
+                        <input class="form-control mb-3" th:field="*{state}" placeholder="State">
+                        <input class="form-control mb-3" th:field="*{postalCode}" placeholder="Postal code">
+                        <input class="form-control mb-3" th:field="*{country}" placeholder="Country">
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" th:field="*{defaultAddress}">
+                            <label class="form-check-label">Set as default</label>
+                        </div>
+                        <button class="btn btn-brand" type="submit">Save Address</button>
+                    </form>
+                    <div class="mt-4" th:each="address : ${addresses}">
+                        <div class="border rounded-4 p-3 mb-2">
+                            <div class="fw-semibold" th:text="${address.label}"></div>
+                            <div th:text="${address.lineOne + ', ' + address.city + ', ' + address.state + ' ' + address.postalCode}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="info-card p-4 mb-4">
+                    <h4>Order History</h4>
+                    <div th:if="${#lists.isEmpty(orders)}" class="text-muted">No orders yet.</div>
+                    <div th:each="order : ${orders}" class="border rounded-4 p-3 mb-3">
+                        <div class="d-flex justify-content-between"><strong th:text="${'Order #' + order.id}"></strong><span th:text="${order.status}"></span></div>
+                        <div class="small text-muted" th:text="${order.paymentReference}"></div>
+                        <div th:text="${'$' + order.totalAmount}"></div>
+                    </div>
+                </div>
+                <div class="info-card p-4 mb-4">
+                    <h4>Saved Items</h4>
+                    <div class="row g-3">
+                        <div class="col-md-6" th:each="item : ${wishlist}">
+                            <div class="border rounded-4 p-3 h-100">
+                                <div class="fw-semibold" th:text="${item.itemName}"></div>
+                                <div class="small text-muted" th:text="${item.itemType}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-card p-4">
+                    <h4>Service Bookings</h4>
+                    <div th:each="booking : ${bookings}" class="border rounded-4 p-3 mb-3">
+                        <div class="fw-semibold" th:text="${booking.serviceName}"></div>
+                        <div class="small text-muted" th:text="${booking.petName + ' · ' + booking.appointmentDate}"></div>
+                        <div th:text="${booking.status}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

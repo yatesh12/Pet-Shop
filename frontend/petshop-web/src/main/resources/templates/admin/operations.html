@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Admin Operations')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-5">
+    <div class="row g-4">
+        <div class="col-lg-3" th:replace="~{fragments/layout :: adminSidebar}"></div>
+        <div class="col-lg-9">
+            <div class="section-card p-4 mb-4">
+                <h2>Orders</h2>
+                <div class="table-shell"><table class="table table-striped"><tr><th>ID</th><th>Customer</th><th>Status</th><th>Total</th></tr><tr th:each="order : ${orders}"><td th:text="${order.id}"></td><td th:text="${order.customerName}"></td><td th:text="${order.status}"></td><td th:text="${'$' + order.totalAmount}"></td></tr></table></div>
+            </div>
+            <div class="section-card p-4 mb-4">
+                <h2>Inquiries & Messages</h2>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <h5>Inquiries</h5>
+                        <div th:each="inquiry : ${inquiries}" class="border rounded-4 p-3 mb-2"><strong th:text="${inquiry.customerName}"></strong><div class="small text-muted" th:text="${inquiry.itemSlug}"></div><p class="mb-0" th:text="${inquiry.message}"></p></div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Contact Messages</h5>
+                        <div th:each="message : ${messages}" class="border rounded-4 p-3 mb-2"><strong th:text="${message.subject}"></strong><div class="small text-muted" th:text="${message.email}"></div><p class="mb-0" th:text="${message.message}"></p></div>
+                    </div>
+                </div>
+            </div>
+            <div class="section-card p-4">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <h5>Service Bookings</h5>
+                        <div th:each="booking : ${bookings}" class="border rounded-4 p-3 mb-2"><strong th:text="${booking.serviceName}"></strong><div class="small text-muted" th:text="${booking.customerName + ' · ' + booking.appointmentDate}"></div></div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Adoption Requests</h5>
+                        <div th:each="adoption : ${adoptions}" class="border rounded-4 p-3 mb-2"><strong th:text="${adoption.petName}"></strong><div class="small text-muted" th:text="${adoption.customerName + ' · ' + adoption.homeType}"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
+

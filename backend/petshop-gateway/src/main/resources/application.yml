@@ -1,0 +1,26 @@
+server:
+  port: ${PORT:${SERVER_PORT:8090}}
+
+spring:
+  application:
+    name: petshop-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: web
+          uri: ${PETSHOP_ROUTES_WEB:http://localhost:8080}
+          predicates:
+            - Path=/,/shop/**,/pets/**,/services/**,/about,/contact,/faq,/blog/**,/cart/**,/checkout/**,/account/**,/admin/**,/login,/register,/logout,/css/**,/js/**,/images/**,/webjars/**,/error/**
+        - id: catalog-api
+          uri: ${PETSHOP_ROUTES_CATALOG:http://localhost:8081}
+          predicates:
+            - Path=/api/catalog/**
+        - id: commerce-api
+          uri: ${PETSHOP_ROUTES_COMMERCE:http://localhost:8082}
+          predicates:
+            - Path=/api/commerce/**
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway

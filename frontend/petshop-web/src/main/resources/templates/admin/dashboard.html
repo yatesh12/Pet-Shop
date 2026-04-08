@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Admin Dashboard')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-5">
+    <div class="row g-4">
+        <div class="col-lg-3" th:replace="~{fragments/layout :: adminSidebar}"></div>
+        <div class="col-lg-9">
+            <div class="section-card p-4">
+                <span class="badge-soft">Admin Dashboard</span>
+                <h1 class="mt-2">Platform overview</h1>
+                <div class="row g-3 mt-2">
+                    <div class="col-md-4"><div class="metric-card p-4"><div class="small text-muted">Products</div><div class="display-6" th:text="${catalogSummary.productCount}"></div></div></div>
+                    <div class="col-md-4"><div class="metric-card p-4"><div class="small text-muted">Orders</div><div class="display-6" th:text="${commerceSummary.orderCount}"></div></div></div>
+                    <div class="col-md-4"><div class="metric-card p-4"><div class="small text-muted">Users</div><div class="display-6" th:text="${userCount}"></div></div></div>
+                    <div class="col-md-4"><div class="metric-card p-4"><div class="small text-muted">Open Inquiries</div><div class="display-6" th:text="${commerceSummary.openInquiries}"></div></div></div>
+                    <div class="col-md-4"><div class="metric-card p-4"><div class="small text-muted">Open Adoptions</div><div class="display-6" th:text="${commerceSummary.openAdoptions}"></div></div></div>
+                    <div class="col-md-4"><div class="metric-card p-4"><div class="small text-muted">Gross Revenue</div><div class="display-6" th:text="${'$' + commerceSummary.grossRevenue}"></div></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
+

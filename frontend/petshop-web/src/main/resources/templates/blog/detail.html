@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${post.title})}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-5">
+    <article class="section-card p-4 p-lg-5">
+        <span class="badge-soft" th:text="${post.category}"></span>
+        <h1 class="mt-3" th:text="${post.title}"></h1>
+        <p class="text-muted" th:text="${post.authorName + ' · ' + #temporals.format(post.publishedAt, 'dd MMM yyyy')}"></p>
+        <img class="img-fluid rounded-4 my-4" th:src="${post.featuredImageUrl}" th:alt="${post.title}">
+        <p class="lead" th:text="${post.excerpt}"></p>
+        <div th:text="${post.content}"></div>
+        <div class="mt-4">
+            <span class="badge bg-light text-dark me-2" th:each="tag : ${post.tags}" th:text="${tag}"></span>
+        </div>
+    </article>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
+

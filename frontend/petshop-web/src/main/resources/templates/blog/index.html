@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Blog')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-5">
+    <div class="section-title mb-4">
+        <span class="badge-soft">Blog & Tips</span>
+        <h1 class="mt-2">Care guides for nutrition, behavior, and everyday pet routines</h1>
+    </div>
+    <div class="row g-4">
+        <div class="col-lg-6" th:each="post : ${posts.content}">
+            <div class="blog-card p-4 h-100">
+                <img class="card-media card-media-sm rounded-4 mb-3" th:src="${post.featuredImageUrl}" th:alt="${post.title}">
+                <span class="badge bg-light text-dark" th:text="${post.category}"></span>
+                <h3 class="mt-3" th:text="${post.title}"></h3>
+                <p class="text-muted" th:text="${post.excerpt}"></p>
+                <div class="small text-muted mb-3" th:text="${post.authorName}"></div>
+                <a class="btn btn-brand" th:href="@{'/blog/' + ${post.slug}}">Read Article</a>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <a class="btn btn-outline-brand" th:if="${!posts.first}" th:href="@{/blog(page=${posts.page - 1})}">Previous</a>
+        <span class="text-muted">Page <span th:text="${posts.page + 1}"></span> of <span th:text="${posts.totalPages}"></span></span>
+        <a class="btn btn-outline-brand ms-auto" th:if="${!posts.last}" th:href="@{/blog(page=${posts.page + 1})}">Next</a>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

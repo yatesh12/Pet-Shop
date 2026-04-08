@@ -1,0 +1,131 @@
+CREATE SCHEMA IF NOT EXISTS catalog;
+
+CREATE TABLE IF NOT EXISTS product_categories (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(80) NOT NULL UNIQUE,
+    slug VARCHAR(80) NOT NULL UNIQUE,
+    description VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS products (
+    id BIGSERIAL PRIMARY KEY,
+    category_id BIGINT NOT NULL REFERENCES product_categories(id),
+    name VARCHAR(120) NOT NULL,
+    slug VARCHAR(120) NOT NULL UNIQUE,
+    description VARCHAR(1500) NOT NULL,
+    supplier_name VARCHAR(120),
+    price NUMERIC(10,2) NOT NULL,
+    stock_quantity INT NOT NULL DEFAULT 0,
+    featured BOOLEAN NOT NULL DEFAULT FALSE,
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+    image_url VARCHAR(255),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS pet_categories (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(80) NOT NULL UNIQUE,
+    slug VARCHAR(80) NOT NULL UNIQUE,
+    description VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS pets (
+    id BIGSERIAL PRIMARY KEY,
+    category_id BIGINT NOT NULL REFERENCES pet_categories(id),
+    name VARCHAR(100) NOT NULL,
+    slug VARCHAR(100) NOT NULL UNIQUE,
+    breed VARCHAR(100) NOT NULL,
+    age_in_months INT NOT NULL,
+    gender VARCHAR(20) NOT NULL,
+    price NUMERIC(10,2) NOT NULL,
+    sale_type VARCHAR(30) NOT NULL,
+    description VARCHAR(1800) NOT NULL,
+    vaccinated BOOLEAN NOT NULL DEFAULT FALSE,
+    available BOOLEAN NOT NULL DEFAULT TRUE,
+    featured BOOLEAN NOT NULL DEFAULT FALSE,
+    image_url VARCHAR(255),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS pet_vaccinations (
+    id BIGSERIAL PRIMARY KEY,
+    pet_id BIGINT NOT NULL REFERENCES pets(id) ON DELETE CASCADE,
+    vaccine_name VARCHAR(100) NOT NULL,
+    administered_on DATE,
+    notes VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS services (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    slug VARCHAR(100) NOT NULL UNIQUE,
+    category VARCHAR(60) NOT NULL,
+    short_description VARCHAR(255) NOT NULL,
+    description VARCHAR(1400) NOT NULL,
+    price NUMERIC(10,2) NOT NULL,
+    duration_minutes INT NOT NULL,
+    featured BOOLEAN NOT NULL DEFAULT FALSE,
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+    image_url VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS blog_posts (
+    id BIGSERIAL PRIMARY KEY,
+    title VARCHAR(180) NOT NULL,
+    slug VARCHAR(180) NOT NULL UNIQUE,
+    excerpt VARCHAR(320) NOT NULL,
+    content VARCHAR(12000) NOT NULL,
+    category VARCHAR(80) NOT NULL,
+    tags VARCHAR(255) NOT NULL,
+    author_name VARCHAR(120) NOT NULL,
+    featured_image_url VARCHAR(255),
+    published BOOLEAN NOT NULL DEFAULT TRUE,
+    published_at TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS faq_items (
+    id BIGSERIAL PRIMARY KEY,
+    question VARCHAR(255) NOT NULL,
+    answer VARCHAR(1800) NOT NULL,
+    category VARCHAR(80) NOT NULL,
+    display_order INT NOT NULL DEFAULT 0,
+    active BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+CREATE TABLE IF NOT EXISTS reviews (
+    id BIGSERIAL PRIMARY KEY,
+    reviewer_name VARCHAR(100) NOT NULL,
+    rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5),
+    title VARCHAR(150) NOT NULL,
+    body VARCHAR(1200) NOT NULL,
+    subject_type VARCHAR(20) NOT NULL,
+    subject_slug VARCHAR(120) NOT NULL,
+    approved BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS promotions (
+    id BIGSERIAL PRIMARY KEY,
+    title VARCHAR(160) NOT NULL,
+    summary VARCHAR(320) NOT NULL,
+    badge VARCHAR(60) NOT NULL,
+    discount_text VARCHAR(60) NOT NULL,
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+    starts_at TIMESTAMP NOT NULL,
+    ends_at TIMESTAMP NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS admin_team_members (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(120) NOT NULL,
+    role_title VARCHAR(120) NOT NULL,
+    bio VARCHAR(1200) NOT NULL,
+    photo_url VARCHAR(255),
+    email VARCHAR(120),
+    phone VARCHAR(30),
+    display_order INT NOT NULL DEFAULT 0,
+    active BOOLEAN NOT NULL DEFAULT TRUE
+);
+

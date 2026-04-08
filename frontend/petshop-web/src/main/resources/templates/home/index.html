@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Home')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div th:replace="~{fragments/layout :: alerts}"></div>
+<main class="container py-5">
+    <section class="hero-card hero-gradient p-4 p-lg-5 mb-5 position-relative overflow-hidden" data-reveal>
+        <div class="hero-orb hero-orb-one"></div>
+        <div class="hero-orb hero-orb-two"></div>
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <span class="badge-soft bg-white text-success">Pet care, adoption, and shopping in one polished platform</span>
+                <h1 class="display-5 mt-3 brand-display">Warm service for pets and the people who care for them.</h1>
+                <p class="lead opacity-75">Explore premium essentials, meet adoption-ready companions, and schedule care services through a modern storefront built for real customer journeys.</p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a class="btn btn-light rounded-pill px-4" th:href="@{/shop}">Browse Shop</a>
+                    <a class="btn btn-outline-light rounded-pill px-4" th:href="@{/pets}">Meet Pets</a>
+                </div>
+                <div class="row g-3 mt-2">
+                    <div class="col-sm-4">
+                        <div class="glass-stat">
+                            <div class="glass-stat-value" th:text="${#lists.size(home.featuredProducts)}">4</div>
+                            <div class="glass-stat-label">featured products</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="glass-stat">
+                            <div class="glass-stat-value" th:text="${#lists.size(home.featuredPets)}">4</div>
+                            <div class="glass-stat-label">ready-to-meet pets</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="glass-stat">
+                            <div class="glass-stat-value" th:text="${#lists.size(home.featuredServices)}">4</div>
+                            <div class="glass-stat-label">bookable services</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="row g-3">
+                    <div class="col-6" th:each="pet : ${home.featuredPets}">
+                        <div class="metric-card p-3 h-100 tilt-card">
+                            <img class="img-fluid rounded-4 mb-2" th:src="${pet.imageUrl}" th:alt="${pet.name}">
+                            <div class="fw-semibold" th:text="${pet.name}"></div>
+                            <small th:text="${pet.breed}"></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="journey-strip p-4 p-lg-5 mb-5" data-reveal>
+        <div class="row g-3">
+            <div class="col-lg-3 col-sm-6">
+                <div class="journey-step h-100">
+                    <span class="journey-index">01</span>
+                    <h5>Discover</h5>
+                    <p>Browse products, pets, services, blog content, and promotions from one storefront.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <div class="journey-step h-100">
+                    <span class="journey-index">02</span>
+                    <h5>Engage</h5>
+                    <p>Add items to cart, save pets to wishlist, book visits, or submit adoption interest.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <div class="journey-step h-100">
+                    <span class="journey-index">03</span>
+                    <h5>Transact</h5>
+                    <p>Complete checkout, create orders, and capture operational records across the platform.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <div class="journey-step h-100">
+                    <span class="journey-index">04</span>
+                    <h5>Operate</h5>
+                    <p>Admins review analytics, inventory, bookings, inquiries, contacts, and user roles.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-5" data-reveal>
+        <div class="section-title mb-4">
+            <span class="badge-soft">Featured Products</span>
+            <h2 class="mt-2">Curated essentials with premium presentation</h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6" th:each="product : ${home.featuredProducts}">
+                <div class="product-card p-3 h-100 lift-card">
+                    <img class="card-media card-media-sm rounded-4 mb-3" th:src="${product.imageUrl}" th:alt="${product.name}">
+                    <span class="badge bg-light text-dark" th:text="${product.category.name}"></span>
+                    <h5 class="mt-2" th:text="${product.name}"></h5>
+                    <p class="text-muted small" th:text="${product.description}"></p>
+                    <div class="fw-semibold" th:text="${'$' + product.price}"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="row g-4 mb-5" data-reveal>
+        <div class="col-lg-8">
+            <div class="section-card p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <span class="badge-soft">Latest Promotions</span>
+                        <h3 class="mt-2">Seasonal offers and new pet bundles</h3>
+                    </div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-6" th:each="promotion : ${promotions}">
+                        <div class="info-card p-3 h-100">
+                            <span class="badge bg-warning text-dark" th:text="${promotion.badge}"></span>
+                            <h5 class="mt-3" th:text="${promotion.title}"></h5>
+                            <p class="text-muted mb-2" th:text="${promotion.summary}"></p>
+                            <strong th:text="${promotion.discountText}"></strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="section-card p-4 h-100">
+                <span class="badge-soft">Featured Services</span>
+                <div class="mt-3" th:each="service : ${home.featuredServices}">
+                    <div class="border rounded-4 p-3 mb-3">
+                        <div class="fw-semibold" th:text="${service.name}"></div>
+                        <div class="small text-muted" th:text="${service.shortDescription}"></div>
+                        <div class="mt-2 fw-semibold" th:text="${'$' + service.price + ' | ' + service.durationMinutes + ' min'}"></div>
+                    </div>
+                </div>
+                <a class="btn btn-brand w-100" th:href="@{/services}">Book a Service</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-5" data-reveal>
+        <div class="section-title mb-4">
+            <span class="badge-soft">Testimonials</span>
+            <h2 class="mt-2">Kind words from happy customers</h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4" th:each="review : ${home.testimonials}">
+                <div class="section-card p-4 h-100 quote-card">
+                    <div class="text-warning mb-2" th:text="${review.rating + ' / 5'}"></div>
+                    <h5 th:text="${review.title}"></h5>
+                    <p class="text-muted" th:text="${review.body}"></p>
+                    <strong th:text="${review.reviewerName}"></strong>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="newsletter-panel p-4 p-lg-5" data-reveal>
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <span class="badge-soft">Newsletter</span>
+                <h2 class="mt-2">Get care tips, new arrivals, and event updates.</h2>
+                <p class="text-muted">Use the contact page newsletter option if you want to store submissions in the message center.</p>
+            </div>
+            <div class="col-lg-5">
+                <a class="btn btn-brand w-100" th:href="@{/contact}">Join the Newsletter</a>
+            </div>
+        </div>
+    </section>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

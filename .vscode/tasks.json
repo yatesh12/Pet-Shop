@@ -1,0 +1,36 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "run-catalog",
+      "type": "shell",
+      "command": "mvn -pl petshop-catalog-service spring-boot:run",
+      "group": "build"
+    },
+    {
+      "label": "run-commerce",
+      "type": "shell",
+      "command": "mvn -pl petshop-commerce-service spring-boot:run",
+      "group": "build"
+    },
+    {
+      "label": "run-web",
+      "type": "shell",
+      "command": "mvn -pl petshop-web spring-boot:run",
+      "group": "build"
+    },
+    {
+      "label": "run-gateway",
+      "type": "shell",
+      "command": "mvn -pl petshop-gateway spring-boot:run",
+      "group": "build"
+    },
+    {
+      "label": "test-all",
+      "type": "shell",
+      "command": "mvn clean test",
+      "group": "test"
+    }
+  ]
+}
+

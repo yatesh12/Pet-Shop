@@ -1,0 +1,35 @@
+server:
+  port: ${PORT:${SERVER_PORT:8080}}
+
+spring:
+  application:
+    name: petshop-web
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/petshop}
+    username: ${SPRING_DATASOURCE_USERNAME:petshop}
+    password: ${SPRING_DATASOURCE_PASSWORD:petshop}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        default_schema: identity
+        format_sql: true
+  flyway:
+    enabled: true
+    default-schema: identity
+    schemas: identity
+  thymeleaf:
+    cache: ${THYMELEAF_CACHE:false}
+
+petshop:
+  services:
+    catalog-base-url: ${PETSHOP_SERVICES_CATALOG_BASE_URL:http://localhost:8081}
+    commerce-base-url: ${PETSHOP_SERVICES_COMMERCE_BASE_URL:http://localhost:8082}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

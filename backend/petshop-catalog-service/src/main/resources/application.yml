@@ -1,0 +1,30 @@
+server:
+  port: ${PORT:${SERVER_PORT:8081}}
+
+spring:
+  application:
+    name: petshop-catalog-service
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/petshop}
+    username: ${SPRING_DATASOURCE_USERNAME:petshop}
+    password: ${SPRING_DATASOURCE_PASSWORD:petshop}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        default_schema: catalog
+        format_sql: true
+  flyway:
+    enabled: true
+    default-schema: catalog
+    schemas: catalog
+  jackson:
+    default-property-inclusion: non_null
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('About')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-5">
+    <section class="section-card p-5 mb-5">
+        <span class="badge-soft">About Us</span>
+        <h1 class="mt-3">A pet shop built around calm care and confident customer guidance.</h1>
+        <p class="lead text-muted">Our mission is simple: make pet ownership, adoption, and care feel intentional, transparent, and warm from the first click to the first visit.</p>
+        <div class="row g-4 mt-2">
+            <div class="col-md-4"><div class="info-card p-4 h-100"><h5>Story</h5><p>We started by combining thoughtful service bookings, clean retail presentation, and adoption education into one customer journey.</p></div></div>
+            <div class="col-md-4"><div class="info-card p-4 h-100"><h5>Mission</h5><p>Deliver ethical pet care, honest product guidance, and modern digital convenience without losing the personal touch.</p></div></div>
+            <div class="col-md-4"><div class="info-card p-4 h-100"><h5>Values</h5><p>Compassion, transparency, reliability, and beautiful experiences that respect both pets and people.</p></div></div>
+        </div>
+    </section>
+    <section>
+        <div class="section-title mb-4">
+            <span class="badge-soft">Team</span>
+            <h2 class="mt-2">Meet the people behind the experience</h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4" th:each="member : ${team}">
+                <div class="section-card p-4 h-100 text-center">
+                    <img class="img-fluid rounded-4 mb-3" th:src="${member.photoUrl}" th:alt="${member.name}">
+                    <h5 th:text="${member.name}"></h5>
+                    <div class="text-muted mb-2" th:text="${member.roleTitle}"></div>
+                    <p class="small" th:text="${member.bio}"></p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
+
