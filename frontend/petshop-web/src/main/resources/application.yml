@@ -5,9 +5,9 @@ spring:
   application:
     name: petshop-web
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/petshop}
-    username: ${SPRING_DATASOURCE_USERNAME:petshop}
-    password: ${SPRING_DATASOURCE_PASSWORD:petshop}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/identity?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
   jpa:
     hibernate:
       ddl-auto: validate
