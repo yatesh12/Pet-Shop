@@ -1,5 +1,5 @@
 package com.petshop.web.service;
-// Copyright (c) 2024. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
