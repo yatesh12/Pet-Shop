@@ -1,5 +1,6 @@
 package com.petshop.web.security;
 
+import com.petshop.shared.dto.UserProfileDto;
 import com.petshop.web.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +17,18 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmailIgnoreCase(username)
-                .map(CustomUserPrincipal::new)
+                .map(user -> new CustomUserPrincipal(
+                        new UserProfileDto(
+                                user.getId(),
+                                user.getFirstName(),
+                                user.getLastName(),
+                                user.getEmail(),
+                                user.getPhone(),
+                                user.isEnabled(),
+                                user.getRoles().stream().map(role -> role.getName()).toList()
+                        ),
+                        ""
+                ))
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }

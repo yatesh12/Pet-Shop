@@ -2,9 +2,9 @@ package com.petshop.web.controller;
 
 import com.petshop.web.dto.*;
 import com.petshop.shared.dto.*;
+import com.petshop.web.service.AuthClient;
 import com.petshop.web.service.CatalogClient;
 import com.petshop.web.service.CommerceClient;
-import com.petshop.web.service.UserAccountService;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -19,13 +19,13 @@ public class AdminController {
 
     private final CatalogClient catalogClient;
     private final CommerceClient commerceClient;
-    private final UserAccountService userAccountService;
+    private final AuthClient authClient;
 
     @GetMapping
     public String dashboard(Model model) {
         model.addAttribute("catalogSummary", catalogClient.adminSummary());
         model.addAttribute("commerceSummary", commerceClient.analytics());
-        model.addAttribute("userCount", userAccountService.users().size());
+        model.addAttribute("userCount", authClient.users().size());
         return "admin/dashboard";
     }
 
@@ -143,13 +143,13 @@ public class AdminController {
 
     @GetMapping("/users")
     public String users(Model model) {
-        model.addAttribute("users", userAccountService.users());
+        model.addAttribute("users", authClient.users());
         return "admin/users";
     }
 
     @PostMapping("/users/{userId}/role")
     public String assignRole(@PathVariable Long userId, @RequestParam String roleName, RedirectAttributes redirectAttributes) {
-        userAccountService.assignRole(userId, roleName);
+        authClient.assignRole(userId, roleName);
         redirectAttributes.addFlashAttribute("successMessage", "User role updated.");
         return "redirect:/admin/users";
     }

@@ -1,30 +1,33 @@
 package com.petshop.web.service;
 
-import com.petshop.web.entity.AppUser;
-import com.petshop.web.repository.UserRepository;
+import com.petshop.shared.dto.UserProfileDto;
 import com.petshop.web.security.CustomUserPrincipal;
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class CurrentUserService {
 
-    private final UserRepository userRepository;
-
-    public Optional<AppUser> getCurrentUser() {
+    public Optional<UserProfileDto> getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !(authentication.getPrincipal() instanceof CustomUserPrincipal principal)) {
             return Optional.empty();
         }
-        return userRepository.findById(principal.user().getId());
+        return Optional.of(principal.user());
+    }
+
+    public Optional<String> getAccessToken() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !(authentication.getPrincipal() instanceof CustomUserPrincipal principal)) {
+            return Optional.empty();
+        }
+        return Optional.of(principal.token());
     }
 
     public Long requireCurrentUserId() {
-        return getCurrentUser().map(AppUser::getId).orElseThrow(() -> new IllegalStateException("User is not authenticated"));
+        return getCurrentUser().map(UserProfileDto::id).orElseThrow(() -> new IllegalStateException("User is not authenticated"));
     }
 
     public String ownerReference() {

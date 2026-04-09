@@ -6,17 +6,34 @@
 <div th:replace="~{fragments/layout :: alerts}"></div>
 <main class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-lg-5">
-            <div class="section-card p-4 p-lg-5">
-                <span class="badge-soft">Welcome Back</span>
-                <h1 class="mt-3">Sign in to continue</h1>
-                <form method="post" th:action="@{/login}">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                    <input class="form-control mb-3" type="email" name="username" placeholder="Email">
-                    <input class="form-control mb-3" type="password" name="password" placeholder="Password">
-                    <button class="btn btn-brand w-100" type="submit">Sign In</button>
-                </form>
-                <p class="small text-muted mt-3 mb-0">Seeded demo admin: <strong>admin@petshop.local</strong> / <strong>Admin@123</strong></p>
+        <div class="col-xl-10">
+            <div class="split-band editorial-shell p-4 p-lg-5">
+                <div class="row g-4 align-items-center">
+                    <div class="col-lg-6">
+                        <span class="eyebrow">Private Workspace Access</span>
+                        <h1 class="display-5 mt-3">Backend-authenticated sign in for customers and administrators.</h1>
+                        <p class="lead text-muted">Credentials, roles, and access checks now come from the backend identity service so account access and admin permissions are enforced end-to-end.</p>
+                        <div class="hero-media-stack mt-4">
+                            <div class="hero-media-tile" style="background-image:url('https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=900&q=80')"></div>
+                            <div class="hero-media-tile" style="background-image:url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=900&q=80')"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 ms-lg-auto">
+                        <div class="floating-pane p-4 p-lg-5">
+                            <span class="badge-soft">Welcome Back</span>
+                            <h2 class="mt-3 mb-2">Sign in to continue</h2>
+                            <p class="text-muted">Use your customer or admin account to access protected flows.</p>
+                            <form method="post" th:action="@{/login}" data-loading-form>
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                <input class="form-control mb-3" type="email" name="username" placeholder="Email" autocomplete="username">
+                                <input class="form-control mb-3" type="password" name="password" placeholder="Password" autocomplete="current-password">
+                                <button class="btn btn-brand w-100" type="submit" data-loading-text="Signing in...">Sign In</button>
+                            </form>
+                            <div class="small text-muted mt-3">Demo admin: <strong>admin@petshop.local</strong> / <strong>Admin@123</strong></div>
+                            <div class="small text-muted">Demo customer: <strong>jamie@example.com</strong> / <strong>Customer@123</strong></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

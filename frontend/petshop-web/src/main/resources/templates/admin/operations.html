@@ -3,24 +3,68 @@
 <head th:replace="~{fragments/layout :: head('Admin Operations')}"></head>
 <body>
 <nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div th:replace="~{fragments/layout :: alerts}"></div>
 <main class="container py-5">
     <div class="row g-4">
         <div class="col-lg-3" th:replace="~{fragments/layout :: adminSidebar}"></div>
         <div class="col-lg-9">
+            <div class="mesh-panel p-4 p-lg-5 mb-4">
+                <span class="eyebrow">Operations Desk</span>
+                <h1 class="mt-3">Requests, orders, and customer communication in one view.</h1>
+                <p class="text-muted">Detailed request information is surfaced here so admins can respond quickly with context, contact data, and operational status.</p>
+            </div>
             <div class="section-card p-4 mb-4">
                 <h2>Orders</h2>
-                <div class="table-shell"><table class="table table-striped"><tr><th>ID</th><th>Customer</th><th>Status</th><th>Total</th></tr><tr th:each="order : ${orders}"><td th:text="${order.id}"></td><td th:text="${order.customerName}"></td><td th:text="${order.status}"></td><td th:text="${'$' + order.totalAmount}"></td></tr></table></div>
+                <div class="table-shell">
+                    <table class="table table-striped operation-table">
+                        <tr><th>ID</th><th>Customer</th><th>Status</th><th>Payment</th><th>Total</th></tr>
+                        <tr th:each="order : ${orders}">
+                            <td th:text="${order.id}"></td>
+                            <td>
+                                <div class="fw-semibold" th:text="${order.customerName}"></div>
+                                <div class="small text-muted" th:text="${order.customerEmail}"></div>
+                            </td>
+                            <td><span class="status-pill" th:text="${order.status}"></span></td>
+                            <td th:text="${order.paymentStatus}"></td>
+                            <td th:text="${'$' + order.totalAmount}"></td>
+                        </tr>
+                    </table>
+                </div>
             </div>
             <div class="section-card p-4 mb-4">
                 <h2>Inquiries & Messages</h2>
                 <div class="row g-4">
                     <div class="col-md-6">
                         <h5>Inquiries</h5>
-                        <div th:each="inquiry : ${inquiries}" class="border rounded-4 p-3 mb-2"><strong th:text="${inquiry.customerName}"></strong><div class="small text-muted" th:text="${inquiry.itemSlug}"></div><p class="mb-0" th:text="${inquiry.message}"></p></div>
+                        <div class="request-timeline">
+                            <div th:each="inquiry : ${inquiries}" class="request-entry mb-4">
+                                <div class="border rounded-4 p-3 bg-white">
+                                    <div class="d-flex justify-content-between gap-3">
+                                        <strong th:text="${inquiry.customerName}"></strong>
+                                        <span class="status-pill" th:text="${inquiry.status}"></span>
+                                    </div>
+                                    <div class="small text-muted mt-1" th:text="${inquiry.customerEmail + ' | ' + inquiry.phone}"></div>
+                                    <div class="small text-muted" th:text="${inquiry.itemType + ' | ' + inquiry.itemSlug}"></div>
+                                    <p class="mb-0 mt-2" th:text="${inquiry.message}"></p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <h5>Contact Messages</h5>
-                        <div th:each="message : ${messages}" class="border rounded-4 p-3 mb-2"><strong th:text="${message.subject}"></strong><div class="small text-muted" th:text="${message.email}"></div><p class="mb-0" th:text="${message.message}"></p></div>
+                        <div class="request-timeline">
+                            <div th:each="message : ${messages}" class="request-entry mb-4">
+                                <div class="border rounded-4 p-3 bg-white">
+                                    <div class="d-flex justify-content-between gap-3">
+                                        <strong th:text="${message.subject}"></strong>
+                                        <span class="status-pill" th:text="${message.status}"></span>
+                                    </div>
+                                    <div class="small text-muted mt-1" th:text="${message.name + ' | ' + message.email}"></div>
+                                    <div class="small text-muted" th:text="${message.type}"></div>
+                                    <p class="mb-0 mt-2" th:text="${message.message}"></p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

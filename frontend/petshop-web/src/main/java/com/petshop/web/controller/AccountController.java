@@ -2,10 +2,10 @@ package com.petshop.web.controller;
 
 import com.petshop.web.dto.AddressForm;
 import com.petshop.web.dto.ProfileForm;
-import com.petshop.web.entity.AppUser;
+import com.petshop.shared.dto.UserProfileDto;
+import com.petshop.web.service.AuthClient;
 import com.petshop.web.service.CommerceClient;
 import com.petshop.web.service.CurrentUserService;
-import com.petshop.web.service.UserAccountService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -21,24 +21,24 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AccountController {
 
     private final CurrentUserService currentUserService;
-    private final UserAccountService userAccountService;
+    private final AuthClient authClient;
     private final CommerceClient commerceClient;
 
     @GetMapping("/account")
     public String account(Model model) {
-        AppUser user = currentUserService.getCurrentUser().orElseThrow();
+        UserProfileDto user = authClient.currentUser();
         ProfileForm profileForm = new ProfileForm();
-        profileForm.setFirstName(user.getFirstName());
-        profileForm.setLastName(user.getLastName());
-        profileForm.setEmail(user.getEmail());
-        profileForm.setPhone(user.getPhone());
+        profileForm.setFirstName(user.firstName());
+        profileForm.setLastName(user.lastName());
+        profileForm.setEmail(user.email());
+        profileForm.setPhone(user.phone());
         model.addAttribute("profileForm", profileForm);
         model.addAttribute("addressForm", new AddressForm());
         model.addAttribute("user", user);
-        model.addAttribute("addresses", userAccountService.addresses(user.getId()));
-        model.addAttribute("orders", commerceClient.ordersForUser(user.getId()));
-        model.addAttribute("wishlist", commerceClient.wishlist(user.getId()));
-        model.addAttribute("bookings", commerceClient.bookingsForUser(user.getId()));
+        model.addAttribute("addresses", authClient.addresses());
+        model.addAttribute("orders", commerceClient.ordersForUser(user.id()));
+        model.addAttribute("wishlist", commerceClient.wishlist(user.id()));
+        model.addAttribute("bookings", commerceClient.bookingsForUser(user.id()));
         return "account/index";
     }
 
@@ -50,7 +50,7 @@ public class AccountController {
         if (bindingResult.hasErrors()) {
             return account(model);
         }
-        userAccountService.updateProfile(currentUserService.requireCurrentUserId(), form);
+        authClient.updateProfile(form);
         redirectAttributes.addFlashAttribute("successMessage", "Profile updated.");
         return "redirect:/account";
     }
@@ -63,7 +63,7 @@ public class AccountController {
         if (bindingResult.hasErrors()) {
             return account(model);
         }
-        userAccountService.saveAddress(currentUserService.requireCurrentUserId(), form);
+        authClient.saveAddress(form);
         redirectAttributes.addFlashAttribute("successMessage", "Address saved.");
         return "redirect:/account";
     }

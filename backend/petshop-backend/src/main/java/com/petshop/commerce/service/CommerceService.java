@@ -5,6 +5,8 @@ import com.petshop.commerce.exception.BusinessException;
 import com.petshop.commerce.exception.ResourceNotFoundException;
 import com.petshop.commerce.mapper.CommerceMapper;
 import com.petshop.commerce.repository.*;
+import com.petshop.identity.security.AuthenticatedUser;
+import com.petshop.identity.service.CurrentIdentityService;
 import com.petshop.shared.dto.*;
 import com.petshop.shared.enums.BookingStatus;
 import com.petshop.shared.enums.PaymentStatus;
@@ -32,8 +34,10 @@ public class CommerceService {
     private final ContactMessageRepository contactMessageRepository;
     private final CommerceMapper mapper;
     private final PaymentProvider paymentProvider;
+    private final CurrentIdentityService currentIdentityService;
 
     public CartDto getCart(String ownerReference) {
+        ensureOwnerReferenceAccess(ownerReference);
         Cart cart = cartRepository.findByOwnerReference(ownerReference).orElseGet(() -> {
             Cart created = new Cart();
             created.setOwnerReference(ownerReference);
@@ -43,6 +47,7 @@ public class CommerceService {
     }
 
     public CartDto addCartItem(String ownerReference, AddCartItemRequest request) {
+        ensureOwnerReferenceAccess(ownerReference);
         Cart cart = cartRepository.findByOwnerReference(ownerReference).orElseGet(() -> {
             Cart created = new Cart();
             created.setOwnerReference(ownerReference);
@@ -68,6 +73,7 @@ public class CommerceService {
     }
 
     public CartDto updateCartItem(String ownerReference, Long itemId, UpdateCartItemRequest request) {
+        ensureOwnerReferenceAccess(ownerReference);
         Cart cart = cartRepository.findByOwnerReference(ownerReference).orElseThrow(() -> new ResourceNotFoundException("Cart not found"));
         CartItem item = cartItemRepository.findById(itemId).orElseThrow(() -> new ResourceNotFoundException("Cart item not found"));
         if (!item.getCart().getId().equals(cart.getId())) {
@@ -78,6 +84,7 @@ public class CommerceService {
     }
 
     public void removeCartItem(String ownerReference, Long itemId) {
+        ensureOwnerReferenceAccess(ownerReference);
         Cart cart = cartRepository.findByOwnerReference(ownerReference).orElseThrow(() -> new ResourceNotFoundException("Cart not found"));
         CartItem item = cartItemRepository.findById(itemId).orElseThrow(() -> new ResourceNotFoundException("Cart item not found"));
         if (!item.getCart().getId().equals(cart.getId())) {
@@ -88,6 +95,8 @@ public class CommerceService {
     }
 
     public OrderDto checkout(CheckoutRequest request) {
+        AuthenticatedUser currentUser = currentIdentityService.requireCurrentUser();
+        ensureOwnerReferenceAccess(request.ownerReference());
         if (!Boolean.TRUE.equals(request.agreeToTerms())) {
             throw new BusinessException("You must agree to the terms to complete checkout");
         }
@@ -105,7 +114,7 @@ public class CommerceService {
 
         Order draftOrder = new Order();
         draftOrder.setOwnerReference(request.ownerReference());
-        draftOrder.setUserId(request.userId());
+        draftOrder.setUserId(currentUser.id());
         draftOrder.setCustomerName(request.customerName());
         draftOrder.setCustomerEmail(request.customerEmail());
         draftOrder.setCustomerPhone(request.customerPhone());
@@ -170,6 +179,7 @@ public class CommerceService {
 
     @Transactional(readOnly = true)
     public java.util.List<OrderDto> getOrdersForUser(Long userId) {
+        ensureCurrentUserAccess(userId);
         return orderRepository.findByUserIdOrderByCreatedAtDesc(userId).stream().map(mapper::toDto).toList();
     }
 
@@ -179,9 +189,10 @@ public class CommerceService {
     }
 
     public WishlistItemDto saveWishlistItem(WishlistRequest request) {
-        WishlistItem item = wishlistRepository.findByUserIdAndItemSlugAndItemType(request.userId(), request.itemSlug(), request.itemType())
+        Long userId = currentIdentityService.requireCurrentUser().id();
+        WishlistItem item = wishlistRepository.findByUserIdAndItemSlugAndItemType(userId, request.itemSlug(), request.itemType())
                 .orElseGet(WishlistItem::new);
-        item.setUserId(request.userId());
+        item.setUserId(userId);
         item.setItemType(request.itemType());
         item.setItemSlug(request.itemSlug());
         item.setItemName(request.itemName());
@@ -192,10 +203,13 @@ public class CommerceService {
 
     @Transactional(readOnly = true)
     public java.util.List<WishlistItemDto> getWishlist(Long userId) {
+        ensureCurrentUserAccess(userId);
         return wishlistRepository.findByUserIdOrderByCreatedAtDesc(userId).stream().map(mapper::toDto).toList();
     }
 
     public void deleteWishlistItem(Long id) {
+        WishlistItem item = wishlistRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Wishlist item not found"));
+        ensureCurrentUserAccess(item.getUserId());
         wishlistRepository.deleteById(id);
     }
 
@@ -242,6 +256,7 @@ public class CommerceService {
 
     @Transactional(readOnly = true)
     public java.util.List<ServiceBookingDto> getBookingsForUser(Long userId) {
+        ensureCurrentUserAccess(userId);
         return serviceBookingRepository.findByUserIdOrderByCreatedAtDesc(userId).stream().map(mapper::toDto).toList();
     }
 
@@ -293,5 +308,23 @@ public class CommerceService {
                 revenue,
                 wishlistRepository.count()
         );
+    }
+
+    private void ensureCurrentUserAccess(Long userId) {
+        AuthenticatedUser currentUser = currentIdentityService.requireCurrentUser();
+        if (!currentIdentityService.isAdminOrManager() && !currentUser.id().equals(userId)) {
+            throw new BusinessException("You do not have access to this resource.");
+        }
+    }
+
+    private void ensureOwnerReferenceAccess(String ownerReference) {
+        AuthenticatedUser currentUser = currentIdentityService.requireCurrentUser();
+        if (currentIdentityService.isAdminOrManager()) {
+            return;
+        }
+        String expected = "user-" + currentUser.id();
+        if (!expected.equals(ownerReference)) {
+            throw new BusinessException("You do not have access to this cart.");
+        }
     }
 }

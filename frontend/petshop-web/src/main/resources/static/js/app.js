@@ -50,4 +50,26 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   });
+
+  const loadingOverlay = document.querySelector("[data-loading-overlay]");
+  document.querySelectorAll("[data-loading-form]").forEach(form => {
+    form.addEventListener("submit", event => {
+      if (!form.checkValidity()) {
+        return;
+      }
+
+      const submitButton = form.querySelector("[type='submit']");
+      if (submitButton) {
+        submitButton.disabled = true;
+        if (submitButton.dataset.loadingText) {
+          submitButton.dataset.originalText = submitButton.textContent;
+          submitButton.textContent = submitButton.dataset.loadingText;
+        }
+      }
+
+      if (loadingOverlay) {
+        loadingOverlay.classList.add("is-active");
+      }
+    });
+  });
 });

@@ -101,7 +101,7 @@ public class CatalogPageController {
             model.addAttribute("adoptionForm", new AdoptionForm());
             return "pets/detail";
         }
-        Long userId = currentUserService.getCurrentUser().map(u -> u.getId()).orElse(null);
+        Long userId = currentUserService.getCurrentUser().map(UserProfileDto::id).orElse(null);
         commerceClient.inquire(new InquiryRequest(userId, slug, "PET", form.getCustomerName(), form.getCustomerEmail(), form.getPhone(), form.getMessage()));
         redirectAttributes.addFlashAttribute("successMessage", "Your inquiry has been sent.");
         return "redirect:/pets/" + slug;
@@ -119,7 +119,7 @@ public class CatalogPageController {
             model.addAttribute("inquiryForm", new InquiryForm());
             return "pets/detail";
         }
-        Long userId = currentUserService.getCurrentUser().map(u -> u.getId()).orElse(null);
+        Long userId = currentUserService.getCurrentUser().map(UserProfileDto::id).orElse(null);
         commerceClient.adopt(new AdoptionRequestPayload(userId, slug, petName, form.getCustomerName(), form.getCustomerEmail(), form.getCustomerPhone(), form.getHomeType(), form.getExperienceLevel(), form.getNotes()));
         redirectAttributes.addFlashAttribute("successMessage", "Your adoption request has been submitted.");
         return "redirect:/pets/" + slug;
@@ -141,7 +141,7 @@ public class CatalogPageController {
             model.addAttribute("services", catalogClient.services());
             return "services/index";
         }
-        Long userId = currentUserService.getCurrentUser().map(u -> u.getId()).orElse(null);
+        Long userId = currentUserService.getCurrentUser().map(UserProfileDto::id).orElse(null);
         commerceClient.book(new ServiceBookingRequest(userId, form.getServiceSlug(), form.getServiceName(), form.getPetName(), form.getPetType(), form.getAppointmentDate(), form.getNotes(), form.getCustomerName(), form.getCustomerEmail(), form.getCustomerPhone()));
         redirectAttributes.addFlashAttribute("successMessage", "Booking request submitted. We’ll confirm shortly.");
         return "redirect:/services";
@@ -166,7 +166,7 @@ public class CatalogPageController {
         if (bindingResult.hasErrors()) {
             return "content/contact";
         }
-        Long userId = currentUserService.getCurrentUser().map(u -> u.getId()).orElse(null);
+        Long userId = currentUserService.getCurrentUser().map(UserProfileDto::id).orElse(null);
         commerceClient.contact(new ContactMessageRequest(userId, form.getType(), form.getName(), form.getEmail(), form.getSubject(), form.getMessage()));
         redirectAttributes.addFlashAttribute("successMessage", "Your message has been sent.");
         return "redirect:/contact";

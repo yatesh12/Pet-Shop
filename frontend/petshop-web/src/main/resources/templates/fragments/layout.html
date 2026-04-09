@@ -16,7 +16,7 @@
     <div class="container py-2">
         <a class="navbar-brand text-success" th:href="@{/}">
             <span class="brand-mark">Pet Shop</span>
-            <small class="brand-subtitle">Care commerce and adoption</small>
+            <small class="brand-subtitle">Care, commerce, adoption</small>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
             <span class="navbar-toggler-icon"></span>
@@ -31,7 +31,14 @@
                 <li class="nav-item"><a class="nav-link" th:href="@{/contact}">Contact</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/faq}">FAQ</a></li>
                 <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link" th:href="@{/cart}">Cart</a></li>
-                <li class="nav-item" sec:authorize="isAuthenticated()"><a class="btn btn-outline-brand" th:href="@{/account}">Account</a></li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <div class="auth-cluster">
+                        <a class="btn btn-outline-brand" th:href="@{/account}">Account</a>
+                        <form th:action="@{/logout}" method="post" class="m-0" data-loading-form>
+                            <button class="btn btn-dark rounded-pill px-3" type="submit" data-loading-text="Signing out...">Sign Out</button>
+                        </form>
+                    </div>
+                </li>
                 <li class="nav-item" sec:authorize="!isAuthenticated()"><a class="btn btn-brand" th:href="@{/login}">Sign In</a></li>
             </ul>
         </div>
@@ -41,6 +48,8 @@
 <div th:fragment="alerts" class="container mt-4">
     <div th:if="${successMessage}" class="alert alert-success flash-alert" th:text="${successMessage}"></div>
     <div th:if="${errorMessage}" class="alert alert-danger flash-alert" th:text="${errorMessage}"></div>
+    <div th:if="${param.error}" class="alert alert-danger flash-alert">Sign in failed. Please check your email and password.</div>
+    <div th:if="${param.logout}" class="alert alert-info flash-alert">You have been signed out.</div>
 </div>
 
 <aside th:fragment="adminSidebar" class="admin-sidebar admin-panel p-3 sticky-sidebar">
@@ -71,6 +80,13 @@
                 <p><a th:href="@{/contact}">contact@petshop.local</a></p>
                 <p>+1 555-0100</p>
             </div>
+        </div>
+    </div>
+    <div class="loading-overlay" data-loading-overlay>
+        <div class="loading-overlay-panel">
+            <div class="loading-spinner"></div>
+            <div class="fw-semibold">Working on it...</div>
+            <div class="small text-muted mt-1">Please wait while we complete your request.</div>
         </div>
     </div>
     <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
