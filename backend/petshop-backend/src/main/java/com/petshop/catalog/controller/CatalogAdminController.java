@@ -65,7 +65,7 @@ public class CatalogAdminController {
     public PetDto createPet(@Valid @RequestBody UpsertPetRequest request) {
         return catalogAdminService.savePet(null, request);
     }
-// new endpoint
+
     @PutMapping("/pets/{id}")
     public PetDto updatePet(@PathVariable Long id, @Valid @RequestBody UpsertPetRequest request) {
         return catalogAdminService.savePet(id, request);
