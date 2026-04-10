@@ -13,7 +13,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "users", catalog = "identity")
+@Table(name = "users")
 public class IdentityUser {
 
     @Id
@@ -45,7 +45,6 @@ public class IdentityUser {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
-            catalog = "identity",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )

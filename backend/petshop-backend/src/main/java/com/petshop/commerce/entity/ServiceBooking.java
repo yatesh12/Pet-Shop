@@ -13,7 +13,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "service_bookings", catalog = "commerce")
+@Table(name = "service_bookings")
 public class ServiceBooking {
 
     @Id

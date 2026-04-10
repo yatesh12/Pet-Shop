@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "services", schema = "catalog")
+@Table(name = "services")
 public class CatalogServiceItem {
 
     @Id
