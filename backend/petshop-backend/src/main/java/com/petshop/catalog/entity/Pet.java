@@ -1,5 +1,3 @@
-//Pet.java
-
 package com.petshop.catalog.entity;
 
 import jakarta.persistence.*;
