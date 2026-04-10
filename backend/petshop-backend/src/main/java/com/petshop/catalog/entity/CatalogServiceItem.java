@@ -1,5 +1,5 @@
 package com.petshop.catalog.entity;
-
+// add CatalogServiceItem
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import lombok.Getter;
