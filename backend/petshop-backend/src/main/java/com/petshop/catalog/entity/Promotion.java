@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "promotions", schema = "catalog")
+@Table(name = "promotions")
 public class Promotion {
 
     @Id

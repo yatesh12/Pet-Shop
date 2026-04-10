@@ -15,7 +15,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "pets", schema = "catalog")
+@Table(name = "pets")
 public class Pet {
 
     @Id

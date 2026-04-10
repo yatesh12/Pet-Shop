@@ -5,7 +5,7 @@ spring:
   application:
     name: petshop-backend
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/catalog?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/petshop?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
     username: ${SPRING_DATASOURCE_USERNAME:root}
     password: ${SPRING_DATASOURCE_PASSWORD:}
   jpa:
@@ -17,8 +17,8 @@ spring:
         format_sql: true
   flyway:
     enabled: true
-    default-schema: catalog
-    schemas: catalog,commerce
+    default-schema: petshop
+    schemas: petshop
     locations: classpath:db/migration
   jackson:
     default-property-inclusion: non_null
