@@ -5,7 +5,7 @@ spring:
   application:
     name: petshop-web
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/identity?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/petshop?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
     username: ${SPRING_DATASOURCE_USERNAME:root}
     password: ${SPRING_DATASOURCE_PASSWORD:}
   jpa:
@@ -14,12 +14,9 @@ spring:
     open-in-view: false
     properties:
       hibernate:
-        default_schema: identity
         format_sql: true
   flyway:
-    enabled: true
-    default-schema: identity
-    schemas: identity
+    enabled: false
   thymeleaf:
     cache: ${THYMELEAF_CACHE:false}
 

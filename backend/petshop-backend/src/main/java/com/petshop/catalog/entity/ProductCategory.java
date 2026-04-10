@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "product_categories", schema = "catalog")
+@Table(name = "product_categories")
 public class ProductCategory {
 
     @Id
