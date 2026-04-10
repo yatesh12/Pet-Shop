@@ -1,5 +1,5 @@
 package com.petshop.catalog.entity;
-
+//need to add pet vaccination entity and pet category entity
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
