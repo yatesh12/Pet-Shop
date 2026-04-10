@@ -23,10 +23,10 @@ public class Address {
     @Column(nullable = false, length = 80)
     private String label;
 
-    @Column(name = "line_one", nullable = false, length = 120)
+    @Column(name = "line_one", nullable = false, length = 180)
     private String lineOne;
 
-    @Column(name = "line_two", length = 120)
+    @Column(name = "line_two", length = 180)
     private String lineTwo;
 
     @Column(nullable = false, length = 80)
@@ -44,4 +44,3 @@ public class Address {
     @Column(name = "default_address", nullable = false)
     private boolean defaultAddress;
 }
-

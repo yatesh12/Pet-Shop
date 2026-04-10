@@ -1,11 +1,11 @@
-CREATE DATABASE IF NOT EXISTS identity;
+CREATE DATABASE IF NOT EXISTS petshop;
 
-CREATE TABLE IF NOT EXISTS identity.roles (
+CREATE TABLE IF NOT EXISTS roles (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(40) NOT NULL UNIQUE
 );
 
-CREATE TABLE IF NOT EXISTS identity.users (
+CREATE TABLE IF NOT EXISTS users (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(80) NOT NULL,
     last_name VARCHAR(80) NOT NULL,
@@ -16,21 +16,21 @@ CREATE TABLE IF NOT EXISTS identity.users (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS identity.user_roles (
+CREATE TABLE IF NOT EXISTS user_roles (
     user_id BIGINT NOT NULL,
     role_id BIGINT NOT NULL,
     PRIMARY KEY (user_id, role_id)
 );
 
-ALTER TABLE identity.user_roles
+ALTER TABLE user_roles
     ADD CONSTRAINT fk_identity_user_roles_user
-    FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE CASCADE;
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
 
-ALTER TABLE identity.user_roles
+ALTER TABLE user_roles
     ADD CONSTRAINT fk_identity_user_roles_role
-    FOREIGN KEY (role_id) REFERENCES identity.roles(id) ON DELETE CASCADE;
+    FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE;
 
-CREATE TABLE IF NOT EXISTS identity.addresses (
+CREATE TABLE IF NOT EXISTS addresses (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     label VARCHAR(80) NOT NULL,
@@ -44,11 +44,11 @@ CREATE TABLE IF NOT EXISTS identity.addresses (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-ALTER TABLE identity.addresses
+ALTER TABLE addresses
     ADD CONSTRAINT fk_identity_addresses_user
-    FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE CASCADE;
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
 
-CREATE TABLE IF NOT EXISTS identity.auth_sessions (
+CREATE TABLE IF NOT EXISTS auth_sessions (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     token VARCHAR(120) NOT NULL UNIQUE,
     user_id BIGINT NOT NULL,
@@ -56,6 +56,6 @@ CREATE TABLE IF NOT EXISTS identity.auth_sessions (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-ALTER TABLE identity.auth_sessions
+ALTER TABLE auth_sessions
     ADD CONSTRAINT fk_identity_auth_sessions_user
-    FOREIGN KEY (user_id) REFERENCES identity.users(id) ON DELETE CASCADE;
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;

@@ -11,7 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "addresses", catalog = "identity")
+@Table(name = "addresses")
 public class IdentityAddress {
 
     @Id

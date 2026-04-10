@@ -11,7 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "auth_sessions", catalog = "identity")
+@Table(name = "auth_sessions")
 public class AuthSession {
 
     @Id
